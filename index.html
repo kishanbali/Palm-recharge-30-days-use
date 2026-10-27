@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KEMP EYE AI - 60s Palm Recharge</title>
+<style>
+body{margin:0;background:#0a0a0a;color:#fff;font-family:serif}
+.header{background:#000;color:#d4b779;text-align:center;padding:15px;letter-spacing:4px;font-size:22px}
+.hero{position:relative}
+.hero img{width:100%}
+.badge{position:absolute;top:20px;right:20px;background:#0f1420;border:2px solid #d4b779;color:#d4b779;border-radius:50%;width:110px;height:110px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;font-weight:bold}
+.player{padding:20px;text-align:center}
+.freqBar{height:3px;background:linear-gradient(90deg, #d4b779, transparent);animation:pulse 2s infinite}
+@keyframes pulse{0%{opacity:0.3}50%{opacity:1}100%{opacity:0.3}}
+button{background:#d4b779;color:#000;padding:18px 40px;border:none;border-radius:30px;font-weight:bold;font-size:18px}
+.info{font-size:12px;color:#d4b779;letter-spacing:2px;margin-top:15px}
+</style>
+</head>
+<body>
+<div class="header">KEMP EYE ◉ AI</div>
+<div class="hero">
+  <img src="YOUR_FINAL_IMAGE.jpg">
+  <div class="badge">30-DAY<br>SOUND<br>FREQUENCY<br>USE</div>
+</div>
+<div class="freqBar" id="wave"></div>
+<div class="player">
+  <h2>60 Seconds Palm Recharge</h2>
+  <p id="dayStatus">Day 1 / 30 - Active</p>
+  <button id="playBtn" onclick="togglePlay()">▶ START 60s RECHARGE</button>
+  <div class="info">DAILY 60s • FOCUS • CALM • RECHARGE<br>30-DAY PROTOCOL • SOUND FREQUENCY WELLNESS</div>
+</div>
+
+<script>
+// --- 30 DAY AUTO MODE ---
+let firstUse = localStorage.getItem("firstUse") || null;
+if(!firstUse){ firstUse = new Date().toISOString(); localStorage.setItem("firstUse", firstUse); }
+let expiry = new Date(new Date(firstUse).getTime() + 30*24*60*60*1000);
+
+function updateDay(){
+  let now = new Date();
+  let used = Math.floor((now - new Date(firstUse))/(1000*60*60*24)) + 1;
+  let left = 31 - used;
+  if(left <=0){ document.getElementById("dayStatus").innerText = "EXPIRED - Please Recharge"; document.getElementById("playBtn").disabled=true; return false; }
+  document.getElementById("dayStatus").innerText = `Day ${used} / 30 • ${left} days left • ACTIVE`;
+  return true;
+}
+setInterval(updateDay, 60000); updateDay();
+
+// --- SOUND FREQUENCY ---
+let ctx, osc, gain, playing=false;
+function togglePlay(){
+  if(!updateDay()) return;
+  if(!playing){ ctx = new AudioContext(); osc = ctx.createOscillator(); gain = ctx.createGain();
+  osc.frequency.value = 432; osc.type="sine"; gain.gain.value=0.2; osc.connect(gain); gain.connect(ctx.destination); osc.start(); playing=true;
+  document.getElementById("playBtn").innerText="■ STOP"; setTimeout(()=>{ if(playing) togglePlay(); }, 60000);
+  } else { gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.5); setTimeout(()=>{ osc.stop(); ctx.close(); playing=false; document.getElementById("playBtn").innerText="▶ START 60s RECHARGE"; },600); }
+}
+</script>
+</body>
+</html>
